@@ -8,6 +8,7 @@ public class InteractionManager : MonoBehaviour
 
     public Weapon hoveredWeapon = null;
     public AmmoBox hoveredAmmoBox = null;
+    public Letter hoveredLetter = null;
 
     private void Awake()
     {
@@ -77,6 +78,31 @@ public class InteractionManager : MonoBehaviour
                 if (hoveredAmmoBox)
                 {
                     hoveredAmmoBox.GetComponent<Outline>().enabled = false;
+                }
+            }
+
+            // Letter
+            if (objectHitByRaycast.GetComponent<Letter>())
+            {
+                // Disable the outline of the previously selected item
+                if (hoveredLetter)
+                {
+                    hoveredLetter.GetComponent<Outline>().enabled = false;
+                }
+
+                hoveredLetter = objectHitByRaycast.gameObject.GetComponent<Letter>();
+                hoveredLetter.GetComponent<Outline>().enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Letter.Instance.ReadLetter(objectHitByRaycast.gameObject);
+                }
+            }
+            else
+            {
+                if (hoveredLetter)
+                {
+                    hoveredLetter.GetComponent<Outline>().enabled = false;
                 }
             }
         }
