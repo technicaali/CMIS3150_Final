@@ -11,6 +11,7 @@ public class InteractionManager : MonoBehaviour
     public Letter hoveredLetter = null;
     public Flashlight hoveredFlashlight = null;
     public Batteries hoveredBatteries = null;
+    public Camcorder hoveredCamcorder = null;
 
     private void Awake()
     {
@@ -138,6 +139,7 @@ public class InteractionManager : MonoBehaviour
                 }
             }
 
+            // Batteries
             if (objectHitByRaycast.GetComponent<Batteries>())
             {
                 // Disable the outline of the previously selected item
@@ -160,6 +162,33 @@ public class InteractionManager : MonoBehaviour
                 if (hoveredBatteries)
                 {
                     hoveredBatteries.GetComponent<Outline>().enabled = false;
+                }
+            }
+
+            // Camcorder/NightVision
+            // Batteries
+            if (objectHitByRaycast.GetComponent<Camcorder>())
+            {
+                // Disable the outline of the previously selected item
+                if (hoveredCamcorder)
+                {
+                    hoveredCamcorder.GetComponent<Outline>().enabled = false;
+                }
+
+                hoveredCamcorder = objectHitByRaycast.gameObject.GetComponent<Camcorder>();
+                hoveredCamcorder.GetComponent<Outline>().enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Camcorder.Instance.PickUpCamcorder(objectHitByRaycast.gameObject);
+                    Destroy(objectHitByRaycast.gameObject);
+                }
+            }
+            else
+            {
+                if (hoveredCamcorder)
+                {
+                    hoveredCamcorder.GetComponent<Outline>().enabled = false;
                 }
             }
         }
