@@ -9,6 +9,8 @@ public class InteractionManager : MonoBehaviour
     public Weapon hoveredWeapon = null;
     public AmmoBox hoveredAmmoBox = null;
     public Letter hoveredLetter = null;
+    public Flashlight hoveredFlashlight = null;
+    public Batteries hoveredBatteries = null;
 
     private void Awake()
     {
@@ -103,6 +105,61 @@ public class InteractionManager : MonoBehaviour
                 if (hoveredLetter)
                 {
                     hoveredLetter.GetComponent<Outline>().enabled = false;
+                }
+            }
+
+            // Flashlight
+            if (objectHitByRaycast.GetComponent<Flashlight>())
+            {
+                // Disable the outline of the previously selected item
+                if (hoveredFlashlight)
+                {
+                    hoveredFlashlight.GetComponent<Outline>().enabled = false;
+                }
+
+                hoveredFlashlight = objectHitByRaycast.gameObject.GetComponent<Flashlight>();
+                hoveredFlashlight.GetComponent<Outline>().enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Flashlight.Instance.SetPickedUp();
+                    Flashlight.Instance.FlashlightOn(objectHitByRaycast.gameObject);
+                    MeshRenderer mr = objectHitByRaycast.GetComponent<MeshRenderer>();
+                    CapsuleCollider bc = objectHitByRaycast.GetComponent<CapsuleCollider>();
+                    mr.enabled = false;
+                    bc.enabled = false;
+                }
+            }
+            else
+            {
+                if (hoveredFlashlight)
+                {
+                    hoveredFlashlight.GetComponent<Outline>().enabled = false;
+                }
+            }
+
+            if (objectHitByRaycast.GetComponent<Batteries>())
+            {
+                // Disable the outline of the previously selected item
+                if (hoveredBatteries)
+                {
+                    hoveredBatteries.GetComponent<Outline>().enabled = false;
+                }
+
+                hoveredBatteries = objectHitByRaycast.gameObject.GetComponent<Batteries>();
+                hoveredBatteries.GetComponent<Outline>().enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Batteries.Instance.PickupBatteries(objectHitByRaycast.gameObject);
+                    Destroy(objectHitByRaycast.gameObject);
+                }
+            }
+            else
+            {
+                if (hoveredBatteries)
+                {
+                    hoveredBatteries.GetComponent<Outline>().enabled = false;
                 }
             }
         }
